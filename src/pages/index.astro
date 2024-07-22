@@ -1,0 +1,138 @@
+---
+import "../globals.css"
+import NumberInput from '../components/number_input.astro'
+---
+
+<html lang="en">
+<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>astro-zig-canvas</title>
+	</head>
+    <body class='max-w-2xl m-auto w-full px-4 py-3'>
+	<div class='min-h-screen flex items-center justify-center flex-col gap-3 w-full m-auto'>
+	    <pre
+		id="donut"
+		class='flex items-center justify-center bg-tokyo-bg text-tokyo-fg text-[10px] whitespace-pre w-full'
+	    >
+	    </pre>
+
+	<div class='grid md:grid-cols-2 grid-cols-1 gap-3'>
+		<NumberInput id="a" label={"A (1st angle of rotation)"} value={0} />
+		<NumberInput id="b" label={"B (2nd angle of rotation)"} value={0} />
+	<!-- <input id="fps" type="number" /> -->
+	<!-- <input id="width" type="number" /> -->
+	<!-- <input id="height" type="number" /> -->
+		<NumberInput id="r1" label={"R1 increment (thickness of donut)"} value={0.85} min={0} step={0.1}/>
+		<NumberInput id="r2" label={"R2 increment (size of hole in donut)"} value={2} min={0} step={0.5}/>
+		<NumberInput id="k2" label={"K2 increment (distance of donut from screen)"} value={5} min={0} step={1}/>
+		<NumberInput id="a_increment" label={"A increment (speed of rotation for angle A)"} value={0.00004} min={0} step={0.00001}/>
+		<NumberInput id="b_increment" label={"B increment (speed of rotation for angle B)"} value={0.00002} min={0} step={0.00001}/>
+		<NumberInput id="theta_increment" label={"Theta increment (used to create cross section circle of donut ring)"} value={0.07} min={0} step={0.01}/>
+		<NumberInput id="phi_increment" label={"Phi increment (used to create donut)"} value={0.03} min={0} step={0.01}/>
+	</div>
+
+	</div>
+    </body>
+</html>
+<script>
+var memory = new WebAssembly.Memory({
+    // See build.zig for reasoning
+  initial: 2 /* pages */,
+  maximum: 2 /* pages */,
+});
+
+function decodeString(ptr: number, len: number) {
+  const slice = new Uint8Array(
+    memory.buffer, // memory exported from Zig
+    ptr,
+    len
+  );
+  return new TextDecoder().decode(slice);
+};
+
+var importObject: WebAssembly.Imports = {
+    env: {
+	// Useful for debugging on zig's side
+	print: (ptr: number, len: number) => {
+	    console.log(decodeString(ptr, len));
+	},
+	memory: memory,
+    },
+};
+
+// Loads and initializes the requested WASM file
+WebAssembly.instantiateStreaming(fetch('/bin/astro-donut.wasm'), importObject).then((res) => {
+    const wasmMemoryArray = new Uint8Array(memory.buffer);
+    const exports = res.instance.exports as {
+	getCharBufferPtr: () => number;
+	getScreenHeight: () => number;
+	getScreenWidth: () => number;
+	getR1: () => number,
+	setR1: (r1: number) => void,
+	getR2: () => number,
+	setR2: (r2: number) => void,
+	getK2: () => number,
+	setK2: (k2: number) => void,
+	getA: () => number,
+	setA: (a: number) => void,
+	getB: () => number,
+	setB: (b: number) => void,
+	getAIncrement: () => number,
+	setAIncrement: (increment: number) => void,
+	getBIncrement: () => number,
+	setBIncrement: (increment: number) => void,
+	getThetaIncrement: () => number,
+	setThetaIncrement: (increment: number) => void,
+	getPhiIncrement: () => number,
+	setPhiIncrement: (increment: number) => void,
+	render_frame: () => void;
+    };
+    const pre: HTMLPreElement = document.getElementById("donut") as HTMLPreElement;
+    const inputHandlers: Record<string, (value: number) => void> = {
+	"r1": exports.setR1,
+	"r2": exports.setR2,
+	"k2": exports.setK2,
+	"a": exports.setA,
+	"b": exports.setB,
+	"a_increment": exports.setAIncrement,
+	"b_increment": exports.setBIncrement,
+	"theta_increment": exports.setThetaIncrement,
+	"phi_increment": exports.setPhiIncrement,
+    }
+
+    Object.entries(inputHandlers).forEach(([id, handler]) => {
+	(document.getElementById(id) as HTMLInputElement).addEventListener("input", (e) => {
+	let value = (e.target as any).value;
+	if (!value) {
+	    return;
+	}
+	value = parseFloat(value);
+	if (value === 0 || value === Infinity || value == null) {
+	    console.error(`invalid ${id}: ${value}`);
+	    return;
+	}
+	handler(value);
+	});
+    });
+
+
+    const height = exports.getScreenHeight();
+    const width = exports.getScreenWidth();
+    function renderFrame() {
+	exports.render_frame();
+	const bufferOffset = exports.getCharBufferPtr();
+	const donutCharArray = wasmMemoryArray.slice(bufferOffset, bufferOffset + height * width);
+	const donutStr = new TextDecoder().decode(donutCharArray);
+	pre.innerHTML = donutStr;
+    }
+
+    renderFrame();
+    console.log({ memoryBuffer: memory.buffer });
+    setInterval(renderFrame, 45);
+});
+
+
+</script>
