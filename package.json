@@ -11,14 +11,17 @@
     "format": "prettier . --write"
   },
   "dependencies": {
-    "@astrojs/check": "^0.8.2",
+    "@astrojs/check": "^0.8.3",
     "@astrojs/tailwind": "^5.1.0",
     "astro": "^4.12.2",
+    "dom-to-image": "^2.6.0",
+    "gifenc": "^1.0.3",
     "tailwindcss": "^3.4.7",
-    "toolcool-range-slider": "^4.0.28",
-    "typescript": "^5.5.4"
+    "toolcool-range-slider": "^4.0.28"
   },
   "devDependencies": {
+    "typescript": "^5.5.4",
+    "@types/dom-to-image": "^2.6.7",
     "@types/hast": "^3.0.4",
     "hast-util-select": "^6.0.2",
     "hastscript": "^9.0.0",

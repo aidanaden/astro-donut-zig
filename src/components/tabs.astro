@@ -116,9 +116,9 @@ const { html, panels } = processPanels(panelHtml);
           // Work out which key the user is pressing and
           // Calculate the new tab's index where appropriate
           const nextIndex =
-            e.key === "ArrowLeft"
+            e.key === "ArrowLeft" || e.key === "h"
               ? index - 1
-              : e.key === "ArrowRight"
+              : e.key === "ArrowRight" || e.key === "l"
                 ? index + 1
                 : e.key === "Home"
                   ? 0

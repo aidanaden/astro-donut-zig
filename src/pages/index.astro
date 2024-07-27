@@ -3,13 +3,12 @@ import "../globals.css";
 import Tabs from "../components/tabs.astro";
 import TabItem from "../components/tab-item.astro";
 import Slider from "../components/slider.astro";
-import NumberInput from "../components/number_input.astro";
 
 const DEFAULT_VALUES = {
   // tilt / movement
-  a: 0,
+  a: 0.1,
   a_increment: 0.00002,
-  b: 0,
+  b: 0.1,
   b_increment: 0.00002,
   // donut shape/size
   r1: 0.85,
@@ -35,7 +34,7 @@ const DEFAULT_VALUES = {
         class="flex h-[320px] w-full items-center justify-center whitespace-pre bg-tokyo-bg text-[6px] text-tokyo-fg sm:h-[440px] sm:text-[10px]">
       </pre>
 
-      <div class="w-full space-y-6 px-4 pb-4 md:max-w-[560px]">
+      <div class="w-full space-y-6 px-4 pb-12 md:max-w-[560px]">
         <div class="text-xs">
           <span>
             a: <span id="a_display"></span>
@@ -74,7 +73,7 @@ const DEFAULT_VALUES = {
 
         <Tabs>
           <TabItem label="controls">
-            <div class="py-8">
+            <div class="space-y-8 pb-6 pt-8 md:pb-6 md:pt-6">
               <Tabs
                 wrapperClass="border-none px-0"
                 alignment="center"
@@ -82,52 +81,52 @@ const DEFAULT_VALUES = {
               >
                 <TabItem label="spin">
                   <div
-                    class="flex w-full flex-col items-center justify-center gap-y-6 py-8 text-sm"
+                    class="flex w-full flex-col items-center justify-center gap-y-6 pt-8 text-sm"
                   >
                     <!-- <NumberInput id="a" label={"A (1st angle of rotation)"} value={0} /> -->
-                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
                       <span>A </span>
                       <Slider
                         id="a"
                         value={DEFAULT_VALUES["a"]}
-                        min={0}
+                        min={0.1}
                         max={10}
                         step={0.1}
                         round={1}
                       />
                     </div>
 
-                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
                       <span class="">A increment</span>
                       <Slider
                         id="a_increment"
                         value={DEFAULT_VALUES["a_increment"]}
-                        min={0}
-                        max={0.001}
+                        min={0.00001}
+                        max={0.0005}
                         step={0.00001}
                         round={5}
                       />
                     </div>
 
-                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
                       <span class="">B </span>
                       <Slider
                         id="b"
                         value={DEFAULT_VALUES["b"]}
-                        min={0}
+                        min={0.1}
                         max={10}
                         step={0.1}
                         round={1}
                       />
                     </div>
 
-                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
                       <span class="">B increment</span>
                       <Slider
                         id="b_increment"
                         value={DEFAULT_VALUES["b_increment"]}
-                        min={0}
-                        max={0.001}
+                        min={0.00001}
+                        max={0.0005}
                         step={0.00001}
                         round={5}
                       />
@@ -137,33 +136,33 @@ const DEFAULT_VALUES = {
 
                 <TabItem label="size">
                   <div
-                    class="flex w-full flex-col items-center justify-center gap-y-6 py-8 text-sm"
+                    class="flex w-full flex-col items-center justify-center gap-y-6 pt-8 text-sm"
                   >
-                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
                       <span class="">r1</span>
                       <Slider
                         id="r1"
                         value={DEFAULT_VALUES["r1"]}
-                        min={0}
+                        min={0.05}
                         max={2}
                         step={0.05}
                         round={2}
                       />
                     </div>
 
-                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
                       <span class="">r2</span>
                       <Slider
                         id="r2"
                         value={DEFAULT_VALUES["r2"]}
-                        min={0}
+                        min={0.1}
                         max={3}
                         step={0.1}
                         round={1}
                       />
                     </div>
 
-                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
                       <span class="">k2</span>
                       <Slider
                         id="k2"
@@ -179,26 +178,26 @@ const DEFAULT_VALUES = {
 
                 <TabItem label="donut">
                   <div
-                    class="flex w-full flex-col items-center justify-center gap-y-6 py-8 text-sm"
+                    class="flex w-full flex-col items-center justify-center gap-y-6 pt-8 text-sm"
                   >
-                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
                       <span class="">theta_increment</span>
                       <Slider
                         id="theta_increment"
                         value={DEFAULT_VALUES["theta_increment"]}
-                        min={0}
+                        min={0.01}
                         max={2 * 3.14}
                         step={0.01}
                         round={2}
                       />
                     </div>
 
-                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
                       <span class="">phi_increment</span>
                       <Slider
                         id="phi_increment"
                         value={DEFAULT_VALUES["phi_increment"]}
-                        min={0}
+                        min={0.01}
                         max={2 * 3.14}
                         step={0.01}
                         round={2}
@@ -207,6 +206,14 @@ const DEFAULT_VALUES = {
                   </div>
                 </TabItem>
               </Tabs>
+
+              <div class="flex items-center justify-center">
+                <button
+                  id="export"
+                  class="border-[0.5px] border-tokyo-comment px-3 py-1 transition duration-200 hover:cursor-pointer hover:bg-tokyo-fg hover:text-tokyo-bg"
+                  >export donut!</button
+                >
+              </div>
             </div>
           </TabItem>
           <TabItem label="faq">
@@ -254,6 +261,12 @@ const DEFAULT_VALUES = {
 </html>
 
 <script>
+  import { GIFEncoder, quantize, applyPalette } from "gifenc";
+  import domtoimage from "dom-to-image";
+
+  const gif = GIFEncoder();
+  let palette: number[][];
+
   var memory = new WebAssembly.Memory({
     // See build.zig for reasoning
     initial: 2 /* pages */,
@@ -376,7 +389,32 @@ const DEFAULT_VALUES = {
       );
       const donutStr = new TextDecoder().decode(donutCharArray);
       pre.innerHTML = donutStr;
+
+      domtoimage.toPixelData(pre).then(function (pixels) {
+        if (!palette) {
+          palette = quantize(pixels, 2, {
+            format: "rgb444",
+            oneBitAlpha: true,
+          });
+        }
+
+        const index = applyPalette(pixels, palette);
+        gif.writeFrame(index, pre.scrollWidth, pre.scrollHeight, {
+          palette,
+          delay: 16,
+        });
+      });
     }
+
+    document.getElementById("export")?.addEventListener("click", () => {
+      gif.finish();
+      const bytes = gif.bytes();
+      const blob = new Blob([bytes], { type: "image/gif" });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "donut.gif";
+      link.click();
+    });
 
     renderFrame();
     console.log({ memoryBuffer: memory.buffer });
