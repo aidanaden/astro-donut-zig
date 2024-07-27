@@ -324,9 +324,15 @@ const DEFAULT_VALUES = {
       phi_increment: exports.setPhiIncrement,
     };
 
+    const params = new URLSearchParams(window.location.search);
     Object.entries(inputHandlers).forEach(([id, handler]) => {
-      const displayId = `${id}_display`;
       const element = document.getElementById(id) as HTMLInputElement;
+      const paramValue = params.get(id);
+      console.log({ paramValue });
+      if (paramValue != null) {
+        element.setAttribute("value", paramValue);
+      }
+      const displayId = `${id}_display`;
       const displayEl = document.getElementById(displayId);
       const elementValue = element.getAttribute("value");
       // Set initial values
@@ -335,11 +341,11 @@ const DEFAULT_VALUES = {
       }
       element.addEventListener("change", (e) => {
         let value = (e as any).detail.value;
-        if (!value) {
+        if (value === null || value === undefined) {
           return;
         }
         value = parseFloat(value);
-        if (value === 0 || value === Infinity || value == null) {
+        if (value === Infinity || value == null) {
           console.error(`invalid ${id}: ${value}`);
           return;
         }
@@ -347,6 +353,12 @@ const DEFAULT_VALUES = {
         const displayEl = document.getElementById(displayId);
         if (displayEl) {
           displayEl.innerHTML = value;
+        }
+
+        if ("URLSearchParams" in window) {
+          const url = new URL(window.location.toString());
+          url.searchParams.set(id, value);
+          history.pushState(null, "", url);
         }
 
         handler(value);
