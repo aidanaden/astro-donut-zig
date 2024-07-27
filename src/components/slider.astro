@@ -1,0 +1,37 @@
+---
+type Props = {
+  id?: string;
+  min?: number;
+  step?: number;
+  value?: number;
+  round?: number;
+  max?: number;
+};
+const { id, min, step, value, round, max } = Astro.props;
+---
+
+<tc-range-slider
+  id={id}
+  generate-labels="true"
+  generate-labels-text-color="#c0caf5"
+  min={min}
+  step={step}
+  value={value}
+  round={round}
+  max={max}
+  slider-bg="#565f89"
+  slider-bg-fill="#c0caf5"
+  slider-height="1px"
+  slider-radius="0px"
+  pointer-bg="#c0caf5"
+  pointer-bg-hover="#c0caf5"
+  pointer-bg-focus="#c0caf5"
+  pointer-border="0"
+  pointer-width="8px"
+  pointer-height="15px"
+  pointer-radius="0px"></tc-range-slider>
+
+<script>
+  import "toolcool-range-slider/dist/plugins/tcrs-generated-labels.min.js";
+  import "toolcool-range-slider";
+</script>

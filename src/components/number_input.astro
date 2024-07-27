@@ -1,16 +1,23 @@
 ---
 type Props = {
-  id: string
-  label: string
-  value: number
+  id: string;
+  label: string;
+  value: number;
   min?: number;
   step?: number;
-}
+};
 
 const { id, label, value, min, step } = Astro.props;
 ---
 
-<div class="flex flex-col gap-y-0.5 text-xl md:text-base">
-		<label for={id}>{label}</label>
-		<input class="rounded border-slate-300 border py-1 px-1.5" id={id} type="number" value={value} step={step} min={min}/>
+<div class="flex flex-col gap-y-0.5 text-xl md:text-sm">
+  <label for={id}>{label}</label>
+  <input
+    class="border-b-[0.5px] border-slate-300 border-b-tokyo-comment bg-transparent px-1.5 py-1 outline-none focus:border-b-tokyo-fg"
+    id={id}
+    type="number"
+    value={value}
+    step={step}
+    min={min}
+  />
 </div>

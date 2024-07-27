@@ -1,138 +1,373 @@
 ---
-import "../globals.css"
-import NumberInput from '../components/number_input.astro'
+import "../globals.css";
+import Tabs from "../components/tabs.astro";
+import TabItem from "../components/tab-item.astro";
+import Slider from "../components/slider.astro";
+import NumberInput from "../components/number_input.astro";
+
+const DEFAULT_VALUES = {
+  // tilt / movement
+  a: 0,
+  a_increment: 0.00002,
+  b: 0,
+  b_increment: 0.00002,
+  // donut shape/size
+  r1: 0.85,
+  r2: 2,
+  k2: 5,
+  theta_increment: 0.07,
+  phi_increment: 0.03,
+} as const;
 ---
 
 <html lang="en">
-<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>astro-zig-canvas</title>
-	</head>
-    <body class='max-w-2xl m-auto w-full px-4 py-3'>
-	<div class='min-h-screen flex items-center justify-center flex-col gap-3 w-full m-auto'>
-	    <pre
-		id="donut"
-		class='flex items-center justify-center bg-tokyo-bg text-tokyo-fg text-[10px] whitespace-pre w-full'
-	    >
-	    </pre>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>astro-zig-canvas</title>
+  </head>
+  <body class="mx-auto w-full max-w-2xl">
+    <div class="flex min-h-screen w-full flex-col items-center gap-3">
+      <pre
+        id="donut"
+        class="flex h-[320px] w-full items-center justify-center whitespace-pre bg-tokyo-bg text-[6px] text-tokyo-fg sm:h-[440px] sm:text-[10px]">
+      </pre>
 
-	<div class='grid md:grid-cols-2 grid-cols-1 gap-3'>
-		<NumberInput id="a" label={"A (1st angle of rotation)"} value={0} />
-		<NumberInput id="b" label={"B (2nd angle of rotation)"} value={0} />
-	<!-- <input id="fps" type="number" /> -->
-	<!-- <input id="width" type="number" /> -->
-	<!-- <input id="height" type="number" /> -->
-		<NumberInput id="r1" label={"R1 increment (thickness of donut)"} value={0.85} min={0} step={0.1}/>
-		<NumberInput id="r2" label={"R2 increment (size of hole in donut)"} value={2} min={0} step={0.5}/>
-		<NumberInput id="k2" label={"K2 increment (distance of donut from screen)"} value={5} min={0} step={1}/>
-		<NumberInput id="a_increment" label={"A increment (speed of rotation for angle A)"} value={0.00004} min={0} step={0.00001}/>
-		<NumberInput id="b_increment" label={"B increment (speed of rotation for angle B)"} value={0.00002} min={0} step={0.00001}/>
-		<NumberInput id="theta_increment" label={"Theta increment (used to create cross section circle of donut ring)"} value={0.07} min={0} step={0.01}/>
-		<NumberInput id="phi_increment" label={"Phi increment (used to create donut)"} value={0.03} min={0} step={0.01}/>
-	</div>
+      <div class="w-full space-y-6 px-4 pb-4 md:max-w-[560px]">
+        <div class="text-xs">
+          <span>
+            a: <span id="a_display"></span>
+          </span>
+          <span>
+            a_increment: <span id="a_increment_display"></span>
+          </span>
+          <span>
+            b: <span id="b_display"> </span>
+          </span>
+          <span>
+            b_increment:
+            <span id="b_increment_display"></span>
+          </span>
+          <span>
+            r1:
+            <span id="r1_display"></span>
+          </span>
+          <span>
+            r2:
+            <span id="r2_display"></span>
+          </span>
+          <span>
+            k2:
+            <span id="k2_display"></span>
+          </span>
+          <span>
+            theta_increment:
+            <span id="theta_increment_display"></span>
+          </span>
+          <span>
+            phi_increment:
+            <span id="phi_increment_display"></span>
+          </span>
+        </div>
 
-	</div>
-    </body>
+        <Tabs>
+          <TabItem label="controls">
+            <div class="py-8">
+              <Tabs
+                wrapperClass="border-none px-0"
+                alignment="center"
+                tabClass="aria-selected:text-tokyo-blue hover:text-tokyo-blue/80"
+              >
+                <TabItem label="spin">
+                  <div
+                    class="flex w-full flex-col items-center justify-center gap-y-6 py-8 text-sm"
+                  >
+                    <!-- <NumberInput id="a" label={"A (1st angle of rotation)"} value={0} /> -->
+                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                      <span>A </span>
+                      <Slider
+                        id="a"
+                        value={DEFAULT_VALUES["a"]}
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        round={1}
+                      />
+                    </div>
+
+                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                      <span class="">A increment</span>
+                      <Slider
+                        id="a_increment"
+                        value={DEFAULT_VALUES["a_increment"]}
+                        min={0}
+                        max={0.001}
+                        step={0.00001}
+                        round={5}
+                      />
+                    </div>
+
+                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                      <span class="">B </span>
+                      <Slider
+                        id="b"
+                        value={DEFAULT_VALUES["b"]}
+                        min={0}
+                        max={10}
+                        step={0.1}
+                        round={1}
+                      />
+                    </div>
+
+                    <div class="max-w-[320px] px-4 md:max-w-[480px]">
+                      <span class="">B increment</span>
+                      <Slider
+                        id="b_increment"
+                        value={DEFAULT_VALUES["b_increment"]}
+                        min={0}
+                        max={0.001}
+                        step={0.00001}
+                        round={5}
+                      />
+                    </div>
+                  </div>
+                </TabItem>
+
+                <TabItem label="size">
+                  <div
+                    class="flex w-full flex-col items-center justify-center gap-y-6 py-8 text-sm"
+                  >
+                    <div class="max-w-[250px] md:max-w-none">
+                      <span class="">r1</span>
+                      <Slider
+                        id="r1"
+                        value={DEFAULT_VALUES["r1"]}
+                        min={0}
+                        max={2}
+                        step={0.05}
+                        round={2}
+                      />
+                    </div>
+
+                    <div class="max-w-[250px] md:max-w-none">
+                      <span class="">r2</span>
+                      <Slider
+                        id="r2"
+                        value={DEFAULT_VALUES["r2"]}
+                        min={0}
+                        max={3}
+                        step={0.1}
+                        round={1}
+                      />
+                    </div>
+
+                    <div class="max-w-[250px] md:max-w-none">
+                      <span class="">k2</span>
+                      <Slider
+                        id="k2"
+                        value={DEFAULT_VALUES["k2"]}
+                        min={3}
+                        max={15}
+                        step={0.5}
+                        round={1}
+                      />
+                    </div>
+                  </div>
+                </TabItem>
+
+                <TabItem label="donut">
+                  <div
+                    class="flex w-full flex-col items-center justify-center gap-y-6 py-8 text-sm"
+                  >
+                    <div class="max-w-[250px] md:max-w-none">
+                      <span class="">theta_increment</span>
+                      <Slider
+                        id="theta_increment"
+                        value={DEFAULT_VALUES["theta_increment"]}
+                        min={0}
+                        max={2 * 3.14}
+                        step={0.01}
+                        round={2}
+                      />
+                    </div>
+
+                    <div class="max-w-[250px] md:max-w-none">
+                      <span class="">phi_increment</span>
+                      <Slider
+                        id="phi_increment"
+                        value={DEFAULT_VALUES["phi_increment"]}
+                        min={0}
+                        max={2 * 3.14}
+                        step={0.01}
+                        round={2}
+                      />
+                    </div>
+                  </div>
+                </TabItem>
+              </Tabs>
+            </div>
+          </TabItem>
+          <TabItem label="faq">
+            <div class="space-y-6 px-0.5 py-4">
+              <div class="space-y-1.5">
+                <span class="text-tokyo-blue">How does this work?</span>
+                <p>
+                  Based on the famous <a
+                    href="https://www.a1k0n.net/2011/07/20/donut-math.html"
+                    target="_blank">donut.c</a
+                  >, rewritten in zig and compiled to wasm. Config values are
+                  sent from the html page to the wasm binary, with the output
+                  frame calculated and returned.
+                </p>
+              </div>
+              <div class="space-y-1.5">
+                <span class="text-tokyo-blue"
+                  >What do the values "a", "b", "a_increment", etc mean?</span
+                >
+                <p>
+                  Please refer to <a
+                    href="https://www.a1k0n.net/2011/07/20/donut-math.html"
+                    target="_blank">donut.c</a
+                  >
+                </p>
+              </div>
+              <div class="space-y-1.5">
+                <span class="text-tokyo-blue"
+                  >Is the animation a video/gif?</span
+                >
+                <p>
+                  No, every frame of the animation above is ascii text output
+                  generated by a wasm program compiled from zig
+                </p>
+              </div>
+            </div>
+          </TabItem>
+        </Tabs>
+      </div>
+    </div>
+  </body>
+  <!-- <input id="fps" type="number" /> -->
+  <!-- <input id="width" type="number" /> -->
+  <!-- <input id="height" type="number" /> -->
 </html>
+
 <script>
-var memory = new WebAssembly.Memory({
+  var memory = new WebAssembly.Memory({
     // See build.zig for reasoning
-  initial: 2 /* pages */,
-  maximum: 2 /* pages */,
-});
+    initial: 2 /* pages */,
+    maximum: 2 /* pages */,
+  });
 
-function decodeString(ptr: number, len: number) {
-  const slice = new Uint8Array(
-    memory.buffer, // memory exported from Zig
-    ptr,
-    len
-  );
-  return new TextDecoder().decode(slice);
-};
+  function decodeString(ptr: number, len: number) {
+    const slice = new Uint8Array(
+      memory.buffer, // memory exported from Zig
+      ptr,
+      len,
+    );
+    return new TextDecoder().decode(slice);
+  }
 
-var importObject: WebAssembly.Imports = {
+  var importObject: WebAssembly.Imports = {
     env: {
-	// Useful for debugging on zig's side
-	print: (ptr: number, len: number) => {
-	    console.log(decodeString(ptr, len));
-	},
-	memory: memory,
+      // Useful for debugging on zig's side
+      print: (ptr: number, len: number) => {
+        console.log(decodeString(ptr, len));
+      },
+      memory: memory,
     },
-};
+  };
 
-// Loads and initializes the requested WASM file
-WebAssembly.instantiateStreaming(fetch('/bin/astro-donut.wasm'), importObject).then((res) => {
+  // Loads and initializes the requested WASM file
+  WebAssembly.instantiateStreaming(
+    fetch("/bin/astro-donut.wasm"),
+    importObject,
+  ).then((res) => {
     const wasmMemoryArray = new Uint8Array(memory.buffer);
     const exports = res.instance.exports as {
-	getCharBufferPtr: () => number;
-	getScreenHeight: () => number;
-	getScreenWidth: () => number;
-	getR1: () => number,
-	setR1: (r1: number) => void,
-	getR2: () => number,
-	setR2: (r2: number) => void,
-	getK2: () => number,
-	setK2: (k2: number) => void,
-	getA: () => number,
-	setA: (a: number) => void,
-	getB: () => number,
-	setB: (b: number) => void,
-	getAIncrement: () => number,
-	setAIncrement: (increment: number) => void,
-	getBIncrement: () => number,
-	setBIncrement: (increment: number) => void,
-	getThetaIncrement: () => number,
-	setThetaIncrement: (increment: number) => void,
-	getPhiIncrement: () => number,
-	setPhiIncrement: (increment: number) => void,
-	render_frame: () => void;
+      getCharBufferPtr: () => number;
+      getScreenHeight: () => number;
+      getScreenWidth: () => number;
+      getR1: () => number;
+      setR1: (r1: number) => void;
+      getR2: () => number;
+      setR2: (r2: number) => void;
+      getK2: () => number;
+      setK2: (k2: number) => void;
+      getA: () => number;
+      setA: (a: number) => void;
+      getB: () => number;
+      setB: (b: number) => void;
+      getAIncrement: () => number;
+      setAIncrement: (increment: number) => void;
+      getBIncrement: () => number;
+      setBIncrement: (increment: number) => void;
+      getThetaIncrement: () => number;
+      setThetaIncrement: (increment: number) => void;
+      getPhiIncrement: () => number;
+      setPhiIncrement: (increment: number) => void;
+      render_frame: () => void;
     };
-    const pre: HTMLPreElement = document.getElementById("donut") as HTMLPreElement;
+    const pre: HTMLPreElement = document.getElementById(
+      "donut",
+    ) as HTMLPreElement;
     const inputHandlers: Record<string, (value: number) => void> = {
-	"r1": exports.setR1,
-	"r2": exports.setR2,
-	"k2": exports.setK2,
-	"a": exports.setA,
-	"b": exports.setB,
-	"a_increment": exports.setAIncrement,
-	"b_increment": exports.setBIncrement,
-	"theta_increment": exports.setThetaIncrement,
-	"phi_increment": exports.setPhiIncrement,
-    }
+      r1: exports.setR1,
+      r2: exports.setR2,
+      k2: exports.setK2,
+      a: exports.setA,
+      a_increment: exports.setAIncrement,
+      b: exports.setB,
+      b_increment: exports.setBIncrement,
+      theta_increment: exports.setThetaIncrement,
+      phi_increment: exports.setPhiIncrement,
+    };
 
     Object.entries(inputHandlers).forEach(([id, handler]) => {
-	(document.getElementById(id) as HTMLInputElement).addEventListener("input", (e) => {
-	let value = (e.target as any).value;
-	if (!value) {
-	    return;
-	}
-	value = parseFloat(value);
-	if (value === 0 || value === Infinity || value == null) {
-	    console.error(`invalid ${id}: ${value}`);
-	    return;
-	}
-	handler(value);
-	});
-    });
+      const displayId = `${id}_display`;
+      const element = document.getElementById(id) as HTMLInputElement;
+      const displayEl = document.getElementById(displayId);
+      const elementValue = element.getAttribute("value");
+      // Set initial values
+      if (displayEl && elementValue !== null) {
+        displayEl.innerHTML = elementValue;
+      }
+      element.addEventListener("change", (e) => {
+        let value = (e as any).detail.value;
+        if (!value) {
+          return;
+        }
+        value = parseFloat(value);
+        if (value === 0 || value === Infinity || value == null) {
+          console.error(`invalid ${id}: ${value}`);
+          return;
+        }
 
+        const displayEl = document.getElementById(displayId);
+        if (displayEl) {
+          displayEl.innerHTML = value;
+        }
+
+        handler(value);
+      });
+    });
 
     const height = exports.getScreenHeight();
     const width = exports.getScreenWidth();
     function renderFrame() {
-	exports.render_frame();
-	const bufferOffset = exports.getCharBufferPtr();
-	const donutCharArray = wasmMemoryArray.slice(bufferOffset, bufferOffset + height * width);
-	const donutStr = new TextDecoder().decode(donutCharArray);
-	pre.innerHTML = donutStr;
+      exports.render_frame();
+      const bufferOffset = exports.getCharBufferPtr();
+      const donutCharArray = wasmMemoryArray.slice(
+        bufferOffset,
+        bufferOffset + height * width,
+      );
+      const donutStr = new TextDecoder().decode(donutCharArray);
+      pre.innerHTML = donutStr;
     }
 
     renderFrame();
     console.log({ memoryBuffer: memory.buffer });
-    setInterval(renderFrame, 45);
-});
-
-
+    setInterval(renderFrame, 16.666);
+  });
 </script>

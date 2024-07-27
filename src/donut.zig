@@ -10,6 +10,8 @@ const PI: f32 = 3.14;
 const SCREEN_WIDTH: i32 = 80;
 const SCREEN_HEIGHT: i32 = 24;
 
+const LUMINANCE_CHARS = ".,-~:;=!*#$@";
+
 /// Radius of cross section circle
 /// OR how thick donut is
 var R1: f32 = 0.85;
@@ -22,9 +24,13 @@ var R2: f32 = 2;
 /// Distance of object from viewer
 var K2: f32 = 5;
 
+var A: f32 = 0;
+
 /// Increment of first axis to rotate on
 /// per frame, controls speed of rotations
-var A_INCREMENT: f32 = 0.00004;
+var A_INCREMENT: f32 = 0.00002;
+
+var B: f32 = 0;
 
 /// Increment of second axis to rotate on
 /// per frame, controls speed of rotations
@@ -42,9 +48,6 @@ var PHI_INCREMENT: f32 = 0.03;
 var z_buffer: [SCREEN_WIDTH * SCREEN_HEIGHT]f32 = undefined;
 // ASCII char value at each  point
 var char_buffer: [SCREEN_WIDTH * SCREEN_HEIGHT]u8 = undefined;
-
-var A: f32 = 0;
-var B: f32 = 0;
 
 /// The returned pointer will be used as an offset integer to the wasm memory
 export fn getCharBufferPtr() [*]u8 {
@@ -153,10 +156,10 @@ export fn render_frame() void {
         print(log_ptr_int, 100);
     }
 
-    const sin_A = std.math.sin(A);
-    const cos_A = std.math.cos(A);
-    const sin_B = std.math.sin(B);
-    const cos_B = std.math.cos(B);
+    const sin_A: f32 = std.math.sin(A);
+    const cos_A: f32 = std.math.cos(A);
+    const sin_B: f32 = std.math.sin(B);
+    const cos_B: f32 = std.math.cos(B);
 
     var i: u32 = 0;
     while (i < SCREEN_WIDTH * SCREEN_HEIGHT) : (i += (SCREEN_WIDTH - 1)) {
@@ -168,16 +171,16 @@ export fn render_frame() void {
     while (theta < 2 * PI) : (theta += THETA_INCREMENT) {
 
         // Precompute sines, cosines of theta
-        const sin_theta = std.math.sin(theta);
-        const cos_theta = std.math.cos(theta);
+        const sin_theta: f32 = std.math.sin(theta);
+        const cos_theta: f32 = std.math.cos(theta);
 
         var phi: f32 = 0.0;
         // Phi goes around the center of revolution of a torus (0 to 2pi)
         while (phi < 2 * PI) : (phi += PHI_INCREMENT) {
 
             // Precompute sines, cosines of phi
-            const sin_phi = std.math.sin(phi);
-            const cos_phi = std.math.cos(phi);
+            const sin_phi: f32 = std.math.sin(phi);
+            const cos_phi: f32 = std.math.cos(phi);
 
             // the x coordinate of the circle (R2 + R1*cos(theta))
             const h: f32 = R2 + R1 * cos_theta;
@@ -201,14 +204,19 @@ export fn render_frame() void {
             const o_u: u32 = @as(u32, @intCast(o));
 
             // determine ascii char for x,y coordinate based on brightness
-            const L: i32 = @intFromFloat(8 * ((sin_theta * sin_A - sin_phi * cos_theta * cos_A) * cos_B - sin_phi * cos_theta * sin_A - sin_theta * cos_A - cos_phi * cos_theta * sin_B));
-
+            // L ranges from -sqrt(2) to +sqrt(2).  If it's < 0, the surface
+            // is pointing away from us, so we won't bother trying to plot it.
+            const L: f32 = (sin_theta * sin_A - sin_phi * cos_theta * cos_A) * cos_B - sin_phi * cos_theta * sin_A - sin_theta * cos_A - cos_phi * cos_theta * sin_B;
             if (y < SCREEN_HEIGHT and y >= 0 and x < (SCREEN_WIDTH - 1) and x >= 0 and D > z_buffer[o_u]) {
                 z_buffer[o_u] = D;
                 if (L > 0) {
-                    char_buffer[o_u] = ".,-~:;=!*#$@"[@as(u32, @intCast(L))];
+                    // luminance_index is now in the range 0..11 (8*sqrt(2) = 11.3)
+                    // now we lookup the character corresponding to the
+                    // luminance and plot it in our output:
+                    const L_idx: u32 = @intFromFloat(8 * L);
+                    char_buffer[o_u] = LUMINANCE_CHARS[L_idx];
                 } else {
-                    char_buffer[o_u] = ".,-~:;=!*#$@"[0];
+                    char_buffer[o_u] = LUMINANCE_CHARS[0];
                 }
             }
         }
