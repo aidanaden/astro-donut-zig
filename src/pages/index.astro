@@ -264,10 +264,12 @@ const DEFAULT_VALUES = {
   import { GIFEncoder, quantize, applyPalette } from "gifenc";
   import domtoimage from "dom-to-image";
 
+  import { updateSearchParams } from "./search_params";
+
   const gif = GIFEncoder();
   let palette: number[][];
 
-  var memory = new WebAssembly.Memory({
+  const memory = new WebAssembly.Memory({
     // See build.zig for reasoning
     initial: 2 /* pages */,
     maximum: 2 /* pages */,
@@ -282,7 +284,7 @@ const DEFAULT_VALUES = {
     return new TextDecoder().decode(slice);
   }
 
-  var importObject: WebAssembly.Imports = {
+  const importObject: WebAssembly.Imports = {
     env: {
       // Useful for debugging on zig's side
       print: (ptr: number, len: number) => {
@@ -368,13 +370,19 @@ const DEFAULT_VALUES = {
           displayEl.innerHTML = value;
         }
 
-        if ("URLSearchParams" in window) {
-          const url = new URL(window.location.toString());
-          url.searchParams.set(id, value);
-          history.pushState(null, "", url);
-        }
-
         handler(value);
+      });
+      element.addEventListener("mouseup", () => {
+        const value = element.value;
+        updateSearchParams(id, value);
+      });
+      element.addEventListener("touchend", () => {
+        const value = element.value;
+        updateSearchParams(id, value);
+      });
+      element.addEventListener("keyup", () => {
+        const value = element.value;
+        updateSearchParams(id, value);
       });
     });
 
