@@ -268,6 +268,8 @@ const DEFAULT_VALUES = {
 
   const gif = GIFEncoder();
   let palette: number[][];
+  const MAX_FRAMES = 600;
+  let frames = 0;
 
   const memory = new WebAssembly.Memory({
     // See build.zig for reasoning
@@ -369,6 +371,8 @@ const DEFAULT_VALUES = {
         if (displayEl) {
           displayEl.innerHTML = value;
         }
+        gif.reset();
+        frames = 0;
 
         handler(value);
       });
@@ -398,6 +402,13 @@ const DEFAULT_VALUES = {
       const donutStr = new TextDecoder().decode(donutCharArray);
       pre.innerHTML = donutStr;
 
+      // TODO: this misses out on a few frames since by the time
+      // this check executes a few `renderFrame` fns would've been
+      // added to event queue already
+      if (frames >= MAX_FRAMES) {
+        return;
+      }
+
       domtoimage.toPixelData(pre).then(function (pixels) {
         if (!palette) {
           palette = quantize(pixels, 2, {
@@ -411,6 +422,7 @@ const DEFAULT_VALUES = {
           palette,
           delay: 16,
         });
+        frames += 1;
       });
     }
 
