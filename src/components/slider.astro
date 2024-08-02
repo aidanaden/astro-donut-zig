@@ -1,19 +1,23 @@
 ---
 type Props = {
   id?: string;
+  description?: string;
   min?: number;
   step?: number;
   value?: number;
   round?: number;
   max?: number;
 };
-const { id, min, step, value, round, max } = Astro.props;
+const { id, description, min, step, value, round, max } = Astro.props;
 ---
 
 <div
   class="flex flex-col items-center justify-center gap-y-3 px-4 md:max-w-[500px]"
 >
-  <div>{id}: <span id={`${id}-value`}></span></div>
+  <div class="space-y-1 text-center">
+    <div>{id}: <span id={`${id}-value`}></span></div>
+    <p class="text-tokyo-comment">{description}</p>
+  </div>
 
   <div class="flex items-center gap-x-3">
     <span class="inline-block text-tokyo-comment">{min}</span>

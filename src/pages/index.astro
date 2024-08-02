@@ -85,6 +85,7 @@ const DEFAULT_VALUES = {
                   >
                     <Slider
                       id="a"
+                      description="first angle of rotation"
                       value={DEFAULT_VALUES["a"]}
                       min={0.1}
                       max={10}
@@ -94,6 +95,7 @@ const DEFAULT_VALUES = {
 
                     <Slider
                       id="a_increment"
+                      description="speed for first angle of rotation"
                       value={DEFAULT_VALUES["a_increment"]}
                       min={0.00001}
                       max={0.0005}
@@ -103,6 +105,7 @@ const DEFAULT_VALUES = {
 
                     <Slider
                       id="b"
+                      description="second angle of rotation"
                       value={DEFAULT_VALUES["b"]}
                       min={0.1}
                       max={10}
@@ -112,6 +115,7 @@ const DEFAULT_VALUES = {
 
                     <Slider
                       id="b_increment"
+                      description="speed for second angle of rotation"
                       value={DEFAULT_VALUES["b_increment"]}
                       min={0.00001}
                       max={0.0005}
@@ -127,6 +131,7 @@ const DEFAULT_VALUES = {
                   >
                     <Slider
                       id="r1"
+                      description="thickness of donut"
                       value={DEFAULT_VALUES["r1"]}
                       min={0.05}
                       max={2}
@@ -136,6 +141,7 @@ const DEFAULT_VALUES = {
 
                     <Slider
                       id="r2"
+                      description="width of donut hole"
                       value={DEFAULT_VALUES["r2"]}
                       min={0.1}
                       max={3}
@@ -145,6 +151,7 @@ const DEFAULT_VALUES = {
 
                     <Slider
                       id="k2"
+                      description="distance of donut from camera"
                       value={DEFAULT_VALUES["k2"]}
                       min={3}
                       max={15}
@@ -160,6 +167,7 @@ const DEFAULT_VALUES = {
                   >
                     <Slider
                       id="theta_increment"
+                      description="used to create cross section of donut"
                       value={DEFAULT_VALUES["theta_increment"]}
                       min={0.01}
                       max={2 * 3.14}
@@ -169,6 +177,7 @@ const DEFAULT_VALUES = {
 
                     <Slider
                       id="phi_increment"
+                      description="used to create donut"
                       value={DEFAULT_VALUES["phi_increment"]}
                       min={0.01}
                       max={2 * 3.14}
