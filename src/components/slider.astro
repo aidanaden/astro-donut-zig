@@ -10,28 +10,39 @@ type Props = {
 const { id, min, step, value, round, max } = Astro.props;
 ---
 
-<tc-range-slider
-  id={id}
-  generate-labels="true"
-  generate-labels-text-color="#c0caf5"
-  min={min}
-  step={step}
-  value={value}
-  round={round}
-  max={max}
-  slider-bg="#565f89"
-  slider-bg-fill="#c0caf5"
-  slider-height="1px"
-  slider-radius="0px"
-  pointer-bg="#c0caf5"
-  pointer-bg-hover="#c0caf5"
-  pointer-bg-focus="#c0caf5"
-  pointer-border="0"
-  pointer-width="8px"
-  pointer-height="15px"
-  pointer-radius="0px"></tc-range-slider>
+<div
+  class="flex flex-col items-center justify-center gap-y-3 px-4 md:max-w-[500px]"
+>
+  <div>{id}: <span id={`${id}-value`}></span></div>
+
+  <div class="flex items-center gap-x-3">
+    <span class="inline-block text-tokyo-comment">{min}</span>
+    <tc-range-slider
+      class="w-[180px] md:w-full md:max-w-[500px]"
+      value-label=`#${id}-value`
+      id={id}
+      min={min}
+      step={step}
+      value={value}
+      round={round}
+      max={max}
+      slider-bg="#565f89"
+      slider-bg-fill="#c0caf5"
+      slider-height="1px"
+      slider-radius="0px"
+      pointer-bg="#c0caf5"
+      pointer-bg-hover="#c0caf5"
+      pointer-bg-focus="#c0caf5"
+      pointer-border="0"
+      pointer-width="8px"
+      pointer-height="15px"
+      pointer-radius="0px"></tc-range-slider>
+
+    <span class="inline-block text-tokyo-comment">{max}</span>
+  </div>
+</div>
 
 <script>
-  import "toolcool-range-slider/dist/plugins/tcrs-generated-labels.min.js";
+  import "toolcool-range-slider/dist/plugins/tcrs-binding-labels.min.js";
   import "toolcool-range-slider";
 </script>

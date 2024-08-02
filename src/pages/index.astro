@@ -81,128 +81,100 @@ const DEFAULT_VALUES = {
               >
                 <TabItem label="spin">
                   <div
-                    class="flex w-full flex-col items-center justify-center gap-y-6 pt-8 text-sm"
+                    class="flex w-full flex-col items-center justify-center gap-y-8 pt-8 text-sm"
                   >
-                    <!-- <NumberInput id="a" label={"A (1st angle of rotation)"} value={0} /> -->
-                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
-                      <span>A </span>
-                      <Slider
-                        id="a"
-                        value={DEFAULT_VALUES["a"]}
-                        min={0.1}
-                        max={10}
-                        step={0.1}
-                        round={1}
-                      />
-                    </div>
+                    <Slider
+                      id="a"
+                      value={DEFAULT_VALUES["a"]}
+                      min={0.1}
+                      max={10}
+                      step={0.1}
+                      round={1}
+                    />
 
-                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
-                      <span class="">A increment</span>
-                      <Slider
-                        id="a_increment"
-                        value={DEFAULT_VALUES["a_increment"]}
-                        min={0.00001}
-                        max={0.0005}
-                        step={0.00001}
-                        round={5}
-                      />
-                    </div>
+                    <Slider
+                      id="a_increment"
+                      value={DEFAULT_VALUES["a_increment"]}
+                      min={0.00001}
+                      max={0.0005}
+                      step={0.00001}
+                      round={5}
+                    />
 
-                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
-                      <span class="">B </span>
-                      <Slider
-                        id="b"
-                        value={DEFAULT_VALUES["b"]}
-                        min={0.1}
-                        max={10}
-                        step={0.1}
-                        round={1}
-                      />
-                    </div>
+                    <Slider
+                      id="b"
+                      value={DEFAULT_VALUES["b"]}
+                      min={0.1}
+                      max={10}
+                      step={0.1}
+                      round={1}
+                    />
 
-                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
-                      <span class="">B increment</span>
-                      <Slider
-                        id="b_increment"
-                        value={DEFAULT_VALUES["b_increment"]}
-                        min={0.00001}
-                        max={0.0005}
-                        step={0.00001}
-                        round={5}
-                      />
-                    </div>
+                    <Slider
+                      id="b_increment"
+                      value={DEFAULT_VALUES["b_increment"]}
+                      min={0.00001}
+                      max={0.0005}
+                      step={0.00001}
+                      round={5}
+                    />
                   </div>
                 </TabItem>
 
                 <TabItem label="size">
                   <div
-                    class="flex w-full flex-col items-center justify-center gap-y-6 pt-8 text-sm"
+                    class="flex w-full flex-col items-center justify-center gap-y-8 pt-8 text-sm"
                   >
-                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
-                      <span class="">r1</span>
-                      <Slider
-                        id="r1"
-                        value={DEFAULT_VALUES["r1"]}
-                        min={0.05}
-                        max={2}
-                        step={0.05}
-                        round={2}
-                      />
-                    </div>
+                    <Slider
+                      id="r1"
+                      value={DEFAULT_VALUES["r1"]}
+                      min={0.05}
+                      max={2}
+                      step={0.05}
+                      round={2}
+                    />
 
-                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
-                      <span class="">r2</span>
-                      <Slider
-                        id="r2"
-                        value={DEFAULT_VALUES["r2"]}
-                        min={0.1}
-                        max={3}
-                        step={0.1}
-                        round={1}
-                      />
-                    </div>
+                    <Slider
+                      id="r2"
+                      value={DEFAULT_VALUES["r2"]}
+                      min={0.1}
+                      max={3}
+                      step={0.1}
+                      round={1}
+                    />
 
-                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
-                      <span class="">k2</span>
-                      <Slider
-                        id="k2"
-                        value={DEFAULT_VALUES["k2"]}
-                        min={3}
-                        max={15}
-                        step={0.5}
-                        round={1}
-                      />
-                    </div>
+                    <Slider
+                      id="k2"
+                      value={DEFAULT_VALUES["k2"]}
+                      min={3}
+                      max={15}
+                      step={0.5}
+                      round={1}
+                    />
                   </div>
                 </TabItem>
 
                 <TabItem label="donut">
                   <div
-                    class="flex w-full flex-col items-center justify-center gap-y-6 pt-8 text-sm"
+                    class="flex w-full flex-col items-center justify-center gap-y-8 pt-8 text-sm"
                   >
-                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
-                      <span class="">theta_increment</span>
-                      <Slider
-                        id="theta_increment"
-                        value={DEFAULT_VALUES["theta_increment"]}
-                        min={0.01}
-                        max={2 * 3.14}
-                        step={0.01}
-                        round={2}
-                      />
-                    </div>
+                    <Slider
+                      id="theta_increment"
+                      value={DEFAULT_VALUES["theta_increment"]}
+                      min={0.01}
+                      max={2 * 3.14}
+                      step={0.01}
+                      round={2}
+                    />
 
-                    <div class="max-w-[320px] px-4 md:max-w-[500px]">
-                      <span class="">phi_increment</span>
-                      <Slider
-                        id="phi_increment"
-                        value={DEFAULT_VALUES["phi_increment"]}
-                        min={0.01}
-                        max={2 * 3.14}
-                        step={0.01}
-                        round={2}
-                      />
-                    </div>
+                    <Slider
+                      id="phi_increment"
+                      value={DEFAULT_VALUES["phi_increment"]}
+                      min={0.01}
+                      max={2 * 3.14}
+                      step={0.01}
+                      round={2}
+                    />
                   </div>
                 </TabItem>
               </Tabs>
@@ -210,8 +182,8 @@ const DEFAULT_VALUES = {
               <div class="flex items-center justify-center">
                 <button
                   id="export"
-                  class="border-[0.5px] border-tokyo-comment px-3 py-1 transition duration-200 hover:cursor-pointer hover:bg-tokyo-fg hover:text-tokyo-bg"
-                  >export donut!</button
+                  class="border-[0.5px] border-tokyo-comment px-3 py-1 text-sm duration-200 ease-in-out hover:scale-105 hover:cursor-pointer hover:bg-tokyo-fg hover:text-tokyo-bg focus:scale-110"
+                  >export as gif</button
                 >
               </div>
             </div>
